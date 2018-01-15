@@ -1,6 +1,5 @@
 package com.example.legacy.endpoint;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Enumeration;
@@ -16,12 +15,11 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class SessionLegacyServlet extends HttpServlet {
+public class ProtectedLegacyServlet extends HttpServlet {
 
-	private static final Log logger = LogFactory.getLog(SessionLegacyServlet.class);
+	private static final Log logger = LogFactory.getLog(ProtectedLegacyServlet.class);
 	
 	private ObjectMapper mapper;
 	
@@ -35,7 +33,7 @@ public class SessionLegacyServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		Map<String,String> map = new HashMap<String,String>();
-		map.put("hello","world");
+		map.put("protected","endpoint");
 		Enumeration<String> names = request.getSession().getAttributeNames();
 		while (names.hasMoreElements()) {
 			String name = names.nextElement();
@@ -46,36 +44,7 @@ public class SessionLegacyServlet extends HttpServlet {
 		//dump the session to the console
 		dumpSession(request.getSession());
 	}
-	
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		System.out.println("called?");
 		
-		//get the map from the string and set it into the session
-		BufferedReader reader = request.getReader();
-		StringBuffer buffer = new StringBuffer();
-		String line;
-		while ((line = reader.readLine()) != null) {
-			buffer.append(line);
-		}//end while
-		//now convert
-		Map<String,String> payload = mapper.readValue(buffer.toString(), new TypeReference<Map<String,String>>() {});
-		
-		System.out.println(payload.size());
-		//set into the session
-		HttpSession session = request.getSession();
-		for (String key : payload.keySet()) {
-			session.setAttribute(key, payload.get(key));
-		}//end for
-		
-		//dump the session to the console
-		dumpSession(request.getSession());
-		//set
-		response.setStatus(201);
-		
-	}
-	
 	
 	private void dumpSession(HttpSession session) {
 		System.out.println(session.getId());
