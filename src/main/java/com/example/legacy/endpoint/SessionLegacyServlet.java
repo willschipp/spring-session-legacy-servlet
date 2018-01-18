@@ -49,9 +49,6 @@ public class SessionLegacyServlet extends HttpServlet {
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		System.out.println("called?");
-		
 		//get the map from the string and set it into the session
 		BufferedReader reader = request.getReader();
 		StringBuffer buffer = new StringBuffer();
@@ -61,8 +58,6 @@ public class SessionLegacyServlet extends HttpServlet {
 		}//end while
 		//now convert
 		Map<String,String> payload = mapper.readValue(buffer.toString(), new TypeReference<Map<String,String>>() {});
-		
-		System.out.println(payload.size());
 		//set into the session
 		HttpSession session = request.getSession();
 		for (String key : payload.keySet()) {
