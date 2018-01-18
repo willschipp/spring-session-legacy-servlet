@@ -47,14 +47,14 @@ public class ProtectedLegacyServlet extends HttpServlet {
 		
 	
 	private void dumpSession(HttpSession session) {
-		System.out.println(session.getId());
-		
-		Enumeration<String> names = session.getAttributeNames();
-		while (names.hasMoreElements()) {
-			String name = names.nextElement();
-			System.out.println(name + " " + session.getAttribute(name));
-		}//end while
-		
+		if (logger.isDebugEnabled()) {
+			logger.debug(session.getId());
+			Enumeration<String> names = session.getAttributeNames();
+			while (names.hasMoreElements()) {
+				String name = names.nextElement();
+				logger.debug(name + " " + session.getAttribute(name));
+			}//end while			
+		}//end if
 	}
 
 	

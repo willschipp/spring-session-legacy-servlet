@@ -8,30 +8,16 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class SessionLegacyServletIT {
+public class SessionLegacyServletIT extends TomcatService {
 	
-	static String appRoot = "/app";
-	
-	static String docRoot = "WebContent";
-	
-	@BeforeClass
-	public static void before() throws Exception {
-		TomcatService.startServer(appRoot,docRoot);
-	}
-	
-	@AfterClass
-	public static void after() throws Exception {
-		TomcatService.stopServer();
-	}
+	String url = URL + "home";
 	
 	@Test
 	public void testDoGetHttpServletRequestHttpServletResponse() throws Exception {
 		HttpClient client = HttpClientBuilder.create().build();
-		HttpGet get = new HttpGet("http://localhost:8080/" + appRoot + "/home");
+		HttpGet get = new HttpGet(url);
 		assertEquals(200,client.execute(get).getStatusLine().getStatusCode());
 		((CloseableHttpClient) client).close();
 	}
@@ -39,7 +25,7 @@ public class SessionLegacyServletIT {
 	@Test
 	public void testDoPostHttpServletRequestHttpServletResponse() throws Exception {
 		HttpClient client = HttpClientBuilder.create().build();
-		HttpPost post = new HttpPost("http://localhost:8080/" + appRoot + "/home");
+		HttpPost post = new HttpPost(url);
 		post.setEntity(new StringEntity("{\"key\":\"value\"}"));
 		assertEquals(201,client.execute(post).getStatusLine().getStatusCode());
 		((CloseableHttpClient) client).close();

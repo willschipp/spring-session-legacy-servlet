@@ -6,10 +6,28 @@ import javax.servlet.ServletException;
 
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.startup.Tomcat;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 
 public class TomcatService {
 
 	static Tomcat tomcat;
+	
+	static String appRoot = "/app";
+	
+	static String docRoot = "WebContent";	
+	
+	static String URL = "http://localhost:8080/app/";
+	
+	@BeforeClass
+	public static void before() throws Exception {
+		startServer(appRoot,docRoot);
+	}
+	
+	@AfterClass
+	public static void after() throws Exception {
+		stopServer();
+	}	
 	
 	public static void startServer(String appRoot,String rootDirectory) throws LifecycleException,ServletException {
 		tomcat = new Tomcat();
