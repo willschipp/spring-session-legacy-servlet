@@ -17,7 +17,9 @@ public class TomcatService {
 	
 	static String docRoot = "WebContent";	
 	
-	static String URL = "http://localhost:8080/app/";
+	static String URL = "http://localhost:{port}/app/";
+	
+	static int port = 0;
 	
 	@BeforeClass
 	public static void before() throws Exception {
@@ -31,9 +33,14 @@ public class TomcatService {
 	
 	public static void startServer(String appRoot,String rootDirectory) throws LifecycleException,ServletException {
 		tomcat = new Tomcat();
-		tomcat.setPort(8080);
+//		tomcat.setPort(8080);
+		tomcat.setPort(0);
 		tomcat.addWebapp("/app", new File("WebContent").getAbsolutePath()).getServletContext().setInitParameter("spring.profiles.active", "test");
 		tomcat.start();
+		port = tomcat.getServer().getPort();
+		//replace
+		URL = URL.replace("{port}", Integer.toString(port));
+		
 	}
 	
 	public static void stopServer() throws LifecycleException {

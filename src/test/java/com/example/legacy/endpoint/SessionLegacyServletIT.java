@@ -28,7 +28,7 @@ public class SessionLegacyServletIT extends TomcatService {
 		HttpPost post = new HttpPost(url);
 		post.setEntity(new StringEntity("{\"key\":\"value\"}"));
 		assertEquals(201,client.execute(post).getStatusLine().getStatusCode());
-		((CloseableHttpClient) client).close();
+		((CloseableHttpClient) client).close(); 
 	}
 
 }
